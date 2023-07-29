@@ -10,55 +10,40 @@ const userInfo = {
     age: 27
 }
 
-let tobject = JSON.stringify(userInfo)
-console.log(tobject)
-const server = http.createServer((req,res)=>{
-    // console.log(req.url)
-    if(req.url==='/file'){
-    res.statusCode = 200
-    res.setHeader("content-type","text/plain")
-    const first = readFileSync('data.txt','utf8')
-    res.end(`${first}`)
-    return
-    }
+const Middleware = (req, res, next) => {
+    console.log(`${req.method} ${req.url}`);
+    next();
+  };
 
-    if(req.url ==='/api/user'){
-        res.statusCode = 200
-        res.setHeader("content-type","application/json")
-        res.write(JSON.stringify(userInfo))
-        res.end()
-    }
-        res.statusCode = 200
-        res.setHeader("content-type","application/json")
-        res.end("Hello,Nodejs!")
-        console.log('it got here regardless')
-})
 
-//  const filedeo = readFile('data.txt','utf8',(err,result)=>{
-//     if(err){return}
-//     // console.log(result)
-//     return result
-// })
-// console.log(filedeo)
 
-// const first = readFileSync('data.txt','utf8')
-// console.log(first)
+const server = http.createServer((req, res) => {
+    // 
+    Middleware(req, res, () => {
+      
+       if(req.url==='/file'){
+             res.statusCode = 200
+             res.setHeader("content-type","text/plain")
+             const first = readFileSync('data.txt','utf8')
+             res.end(`${first}`)      
+        }
 
-// const getText = (filePath)=>{
-//     return new Promise((resolve,reject)=>{
+       else if(req.url ==='/api/user'){
+            res.statusCode = 200
+            res.setHeader("content-type","application/json")
+            res.write(JSON.stringify(userInfo))
+            res.end()
+            
+        }
 
-//         readFile('data.txt','utf8',(err,result)=>{
-//             if(err){reject(err)}
-//             // console.log(result)
-//             else{
-//                 resolve(result)
-//             }
-//         })
-//     })
-// }
-
-// const deobaba = getText('data.txt').then(result)
-// console.log(deobaba)
+        else{
+            res.statusCode = 200
+            res.setHeader("content-type","application/json")
+            res.end("Hello,Nodejs!")
+        }
+            
+    });
+  });
 
 server.listen(PORT, ()=>{
     console.log(`server is on ${PORT}`)
