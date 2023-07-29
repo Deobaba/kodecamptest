@@ -1,4 +1,4 @@
-const { readFile, readFileSync } = require('fs')
+const { readFileSync } = require('fs')
 const http = require('http')
 
 
@@ -13,12 +13,12 @@ const userInfo = {
 const Middleware = (req, res, next) => {
     console.log(`${req.method} ${req.url}`);
     next();
-  };
+};
 
 
 
 const server = http.createServer((req, res) => {
-    // 
+    //middleware 
     Middleware(req, res, () => {
       
        if(req.url==='/file'){
@@ -43,7 +43,7 @@ const server = http.createServer((req, res) => {
         }
             
     });
-  });
+});
 
 server.listen(PORT, ()=>{
     console.log(`server is on ${PORT}`)
